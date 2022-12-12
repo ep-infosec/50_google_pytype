@@ -1,0 +1,282 @@
+add_package()
+
+py_library(
+  NAME
+    overlays
+  DEPS
+    .abc_overlay
+    .asyncio_types_overlay
+    .attr_overlay
+    .chex_overlay
+    .collections_overlay
+    .dataclass_overlay
+    .enum_overlay
+    .flax_overlay
+    .future_overlay
+    .overlay_dict
+    .named_tuple
+    .overlay
+    .overlay_utils
+    .pytype_extensions_overlay
+    .six_overlay
+    .subprocess_overlay
+    .sys_overlay
+    .typed_dict
+    .typing_extensions_overlay
+    .typing_overlay
+)
+
+py_library(
+  NAME
+    classgen
+  SRCS
+    classgen.py
+  DEPS
+    .overlay_utils
+    pytype.special_builtins
+    pytype.abstract.abstract
+)
+
+py_library(
+  NAME
+    abc_overlay
+  SRCS
+    abc_overlay.py
+  DEPS
+    .overlay
+    pytype.special_builtins
+    pytype.abstract.abstract
+)
+
+py_library(
+  NAME
+    asyncio_types_overlay
+  SRCS
+    asyncio_types_overlay.py
+  DEPS
+    .overlay
+    pytype.abstract.abstract
+)
+
+py_library(
+  NAME
+    attr_overlay
+  SRCS
+    attr_overlay.py
+  DEPS
+    .classgen
+    .overlay
+    .overlay_utils
+    pytype.abstract.abstract
+)
+
+py_library(
+  NAME
+    chex_overlay
+  SRCS
+    chex_overlay.py
+  DEPS
+    .classgen
+    .dataclass_overlay
+    .overlay
+    .overlay_utils
+    pytype.abstract.abstract
+    pytype.pytd.pytd
+)
+
+py_library(
+  NAME
+    collections_overlay
+  SRCS
+    collections_overlay.py
+  DEPS
+    .named_tuple
+    .overlay
+    .typing_overlay
+)
+
+py_library(
+  NAME
+    dataclass_overlay
+  SRCS
+    dataclass_overlay.py
+  DEPS
+    .classgen
+    .overlay
+    pytype.abstract.abstract
+)
+
+py_library(
+  NAME
+    enum_overlay
+  SRCS
+    enum_overlay.py
+  DEPS
+    .classgen
+    .overlay
+    .overlay_utils
+    pytype.special_builtins
+    pytype.abstract.abstract
+    pytype.pytd.pytd
+    pytype.typegraph.cfg
+)
+
+py_library(
+  NAME
+    flax_overlay
+  SRCS
+    flax_overlay.py
+  DEPS
+    .classgen
+    .dataclass_overlay
+    .overlay
+    pytype.abstract.abstract
+    pytype.pytd.pytd
+)
+
+py_library(
+  NAME
+    future_overlay
+  SRCS
+    future_overlay.py
+  DEPS
+    .overlay
+    pytype.metaclass
+)
+
+py_library(
+  NAME
+    named_tuple
+  SRCS
+    named_tuple.py
+  DEPS
+    .classgen
+    .overlay_utils
+    pytype.special_builtins
+    pytype.utils
+    pytype.abstract.abstract
+    pytype.pytd.pytd
+)
+
+py_library(
+  NAME
+    overlay
+  SRCS
+    overlay.py
+  DEPS
+    pytype.datatypes
+    pytype.abstract.abstract
+    pytype.typegraph.cfg
+)
+
+py_library(
+  NAME
+    overlay_dict
+  SRCS
+    overlay_dict.py
+  DEPS
+    .abc_overlay
+    .asyncio_types_overlay
+    .attr_overlay
+    .chex_overlay
+    .collections_overlay
+    .dataclass_overlay
+    .enum_overlay
+    .flax_overlay
+    .future_overlay
+    .pytype_extensions_overlay
+    .six_overlay
+    .subprocess_overlay
+    .sys_overlay
+    .typing_extensions_overlay
+    .typing_overlay
+)
+
+py_library(
+  NAME
+    overlay_utils
+  SRCS
+    overlay_utils.py
+  DEPS
+    pytype.abstract.abstract
+    pytype.pytd.pytd
+    pytype.typegraph.cfg
+)
+
+py_library(
+  NAME
+    pytype_extensions_overlay
+  SRCS
+    pytype_extensions_overlay.py
+  DEPS
+    .overlay
+    pytype.special_builtins
+)
+
+py_library(
+  NAME
+    six_overlay
+  SRCS
+    six_overlay.py
+  DEPS
+    .overlay
+    pytype.metaclass
+)
+
+py_library(
+  NAME
+    subprocess_overlay
+  SRCS
+    subprocess_overlay.py
+  DEPS
+    .overlay
+    pytype.special_builtins
+    pytype.abstract.abstract
+)
+
+py_library(
+  NAME
+    sys_overlay
+  SRCS
+    sys_overlay.py
+  DEPS
+    .overlay
+    pytype.abstract.abstract
+)
+
+py_library(
+  NAME
+    typed_dict
+  SRCS
+    typed_dict.py
+  DEPS
+    .classgen
+    pytype.abstract.abstract
+    pytype.pytd.pytd
+)
+
+py_library(
+  NAME
+    typing_extensions_overlay
+  SRCS
+    typing_extensions_overlay.py
+  DEPS
+    .overlay
+    .typing_overlay
+)
+
+py_library(
+  NAME
+    typing_overlay
+  SRCS
+    typing_overlay.py
+  DEPS
+    .named_tuple
+    .overlay
+    .overlay_utils
+    .typed_dict
+    pytype.utils
+    pytype.abstract.abstract
+    pytype.pytd.pytd
+    pytype.typegraph.cfg
+)

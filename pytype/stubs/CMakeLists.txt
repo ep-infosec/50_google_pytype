@@ -1,0 +1,26 @@
+add_package()
+
+filegroup(
+  NAME
+    stubs
+  SRCS
+    builtins/attr/__init__.pytd
+    builtins/attr/_cmp.pytd
+    builtins/attr/_version_info.pytd
+    builtins/attr/converters.pytd
+    builtins/attr/exceptions.pytd
+    builtins/attr/filters.pytd
+    builtins/attr/setters.pytd
+    builtins/attr/validators.pytd
+    builtins/attrs/__init__.pytd
+    builtins/builtins.pytd
+    builtins/mypy_extensions.pytd
+    builtins/numpy/__init__.pytd
+    builtins/protocols.pytd
+    builtins/typing.pytd
+    stdlib/_ctypes.pytd
+    stdlib/collections/__init__.pytd
+    stdlib/dummy_thread.pytd
+    stdlib/encodings.pytd
+    stdlib/enum.pytd
+)

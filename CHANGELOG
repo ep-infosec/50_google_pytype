@@ -1,0 +1,1394 @@
+Version 2022.12.09:
+
+Updates:
+* PEP 612: Add support for imported ParamSpec and Concatenate instances.
+* Update typeshed pin to commit 4e0aacc from July 12.
+* Feature flags:
+  * Remove --mapping-is-not-sequence, which has been a no-op since the last
+    release.
+  * Default --overriding-default-value-checks to True.
+  * Default --overriding-parameter-name-checks to True.
+
+Bug fixes:
+* Fix a bug in module resolution in load_pytd.
+* Don't let one TypeVar contain another, and keep invalid TypeVars when
+  possible.
+* Support calling super() with a subclass of builtins.type.
+* Fix annotation of *args and **kwargs when constructing a SimpleFunction.
+* Don't report container errors for late types.
+* --always-use-return-annotations: handle coroutines.
+* Add missing attributes to typing.TextIO.
+
+Version 2022.11.29:
+
+Updates:
+* Default --mapping-is-not-sequence to True.
+
+Bug fixes:
+* Fix incorrect "Any" count in pytd printer for Callable[nothing, X].
+
+Version 2022.11.18:
+
+Updates:
+* Allow NoReturn to appear anywhere.
+* Add basic TypeGuard support.
+
+Bug fixes:
+* Improve imports handling in the pytd printer.
+* Do a better job of catching bad parameterized types in pyi files.
+* Fix constant folding for python-3.9+ literals compiling to LIST_EXTEND.
+* Stop accidentally converting bound to unbound functions.
+
+Version 2022.11.10:
+
+Updates:
+* Add an optional no-return-any flag to disallow Any as a return type.
+* Add a mechanism to allow per-file opting in to feature flags, via a file-level
+  `features` directive, for example, `# pytype: features=no-return-any`.
+
+Bug fixes:
+* Do not let a kwarg in **args interfere with a posonly arg of the same name,
+  pyi edition.
+* Interpret special characters in serialized (pyi or pickle) Literal[""] type
+  definitions correctly.
+
+Version 2022.10.26:
+
+Updates:
+* Implement basic exhaustiveness checking for pattern matches over enums.
+* Performance improvements:
+  * Avoid expensive variable filtering in a couple of places.
+  * Switch fully to argument-by-argument call matching for PyTDFunction.
+
+Bug fixes:
+* Relax an overly strict TypeVar consistency check.
+* Track TypeVar unions in the matcher.
+* Emit `node/kind record` and `subkind class` facts instead of `node/kind class`
+* Add a missing parameter type to bytearray.__add__.
+
+Version 2022.10.13:
+
+Updates:
+* Add a flag, --mapping-is-not-sequence, to forbid matching mappings against
+  the Sequence protocol.
+* Add a library for serializing the CFG.
+* Fully support pattern matching in 3.10, aside from exhaustiveness checks.
+* Make some performance improvements around type-checking of function call
+  arguments for functions defined in the same file.
+
+Bug fixes:
+* Store more information in matcher._recursive_annots_cache.
+* Fix "appears only once" TypeVar error on overloads in generic classes.
+* Do not let a kwarg in **args interfere with a posonly arg of the same name.
+* Re-resolve LateType instances that resolve to another LateType.
+
+Version 2022.09.27:
+
+Updates:
+* Slightly improve pytype's numpy stub.
+* Remove --overriding-parameter-type-checks flag that is now enabled by default.
+* Add partial support for pattern matching.
+* Add `Attrs` protocol and `__attrs_attrs__` member to attr overlay.
+
+Bug fixes:
+* Fix infinite recursion caused by annotated __new__ methods.
+* Take nested classes into account when re-resolving dependencies in load_pytd.
+* Support empty generic protocols.
+* Correct type annotations for IO objects: `seek` and `truncate`.
+* Define __new__ instead of __init__ for np.ndarray.
+
+Version 2022.09.19:
+
+Updates:
+* Rework arg parsing to make using pytype as a library in tools easier.
+* Move typegraph and cfg graph visualisation to a separate frontend binary.
+* Add a feature flag, --always-use-return-annotations, to always use return type
+  annotations when analyzing function calls.
+* Default --overriding-parameter-type-checks to True. This flag will be removed
+  in an upcoming release.
+
+Bug fixes:
+* Add an OrderedCode object to LOAD_FOLDED_CONST.
+* Treat LiteralString as str in pyi files.
+* xref:
+  * Replace `record` into `package` kind and add `childof` edge from `file`.
+  * Do not add a defines/binding edge for `a.x = ...` if `a` is not `self`.
+
+Version 2022.09.08:
+
+Updates:
+* Remove the --build-dict-literals-from-kwargs flag. Its behavior is now enabled
+  by default.
+
+Bug fixes:
+* Parse Literal values containing quotes better.
+* Make collections.OrderedDict an alias for typing.OrderedDict.
+
+Version 2022.08.30:
+
+Updates:
+* Update typeshed pin to commit 7de1ed9 from Jun 14.
+* Specify option conflicts and required dependencies in @uses decorator in
+  config.Postprocessor.
+* Remove the --strict_namedtuple_checks flag. Its behavior is now enabled by
+  default.
+* Support TypedDict construction via function call in pyi files, and use
+  TypedDict functional form if a keyword is used as a field name.
+
+Bug fixes:
+* Allow [signature-mismatch] disable to be put on any line of a function
+  signature.
+* Teach pytype that _typeshed.NoneType is the same as type(None).
+* Fix a check that was wrongly filtering out lambdas in function bodies.
+* Check for misuse of ellipses in Callable.
+* Add missing constants to _ctypes.
+* xref:
+  * Fix function param indexing.
+  * Index class attributes defined as classvars.
+
+Version 2022.08.23:
+
+Bug fixes:
+* Add missing attrs.validators.min_len.
+* Allow bare variable annotations at the module level.
+* Change the order of the Protocol and Generic bases when expanding
+  Protocol[_T].
+* Handle multiple substitutions better in PyTDSignature.call_with_args.
+* Improve name resolution for typeshed.
+
+Version 2022.08.17:
+
+Updates:
+* Use argument-by-argument call matching for some simple generic functions.
+
+Bug fixes:
+* Check that @classmethod and @staticmethod are applied to callable functions.
+* Add StopIteration.value and turn type comments into annotations.
+* Fix nested class inference for TypedDict and ParameterizedClass.
+* analyze_project: fix parsing of `jobs=auto` from config files.
+* xref: link the entire span of a function call.
+
+Version 2022.08.03:
+
+Bug fixes:
+* Support aliases of module name prefixes in load_pytd.
+* Don't allow partial late annotations in | union types.
+* Fully resolve pytd aliases in LookupExternalType's duplicate aliases check.
+
+Version 2022.07.26:
+
+Updates:
+* Remove the --enable-bare-annotations flag. Its behavior is now the default.
+* Support generic properties.
+
+Bug fixes:
+* Python 3.10:
+  * Don't assume Any | Any is a type annotation.
+  * Calculate starts of decorated functions correctly.
+* Don't crash on a nested function referenced in a closure before definition.
+* Sort classes by name in convert.merge_classes.
+
+Version 2022.07.18:
+
+Bug fixes:
+* Look up methods properly on classes with _HAS_DYNAMIC_ATTRIBUTES.
+* Handle .pyi-1 files in load_pytd.Module.is_package().
+* Adjust opcode line numbers for return statements in python 3.10+.
+* Remove optimize.Factorize, which unnecessarily flattens overloaded functions.
+* Fix coroutine signatures in overriding_checks.
+* Handle generic types correctly in signature compatibility checks.
+* Respect NoReturn annotations even when maximum depth is reached.
+
+Version 2022.06.30:
+
+Updates:
+* Add the option to show kythe facts in the debug indexer.
+* Add a command-line argument `pickle-metadata` to pass metadata to pytype to
+  store during serialization to a pickle file.
+
+Bug fixes:
+* Make slight improvements to --overriding-default-value-checks.
+* Preserve comments when preprocessing source code.
+
+Version 2022.06.23:
+
+Updates:
+* Support `T1 | T2 | ...` syntax for union types in python 3.10+ (PEP604).
+* Replace libcst with ast in directors.py in Python 3.9+. This makes source code
+  parsing much faster.
+
+Bug fixes:
+* Python 3.10 fixes:
+  * Convert `types.NoneType` to `builtins.NoneType`.
+  * Adjust the error line number for an implicit `return None`.
+  * Add `ParamSpecArgs` and `ParamSpecKwargs` to `typing.pytd`.
+
+Version 2022.06.14:
+
+Updates:
+* Add a stub and overlay for the 'attrs' module.
+
+Bug fixes:
+* Fix parameterized attributes for dataclass subclasses.
+* Mark dict views as reversible in Python 3.8+.
+* Add missing memoryview.nbytes attribute.
+* Fix chained attribute traces for python 3.10.
+
+Version 2022.06.06:
+
+Updates:
+* Remove --enable-nested-classes, which has been a no-op since the last release.
+* Support `__all__ += [...]` in pyi files.
+* Add support for the TypedDict functional constructor.
+* Add a `--backup` option to merge_pyi to copy the source file when overwriting.
+* Add a merge_project binary to recursively merge files in a project.
+
+Bug fixes:
+* Preserve precise element types when adding two fixed-length tuples.
+* Raise a meaningful exception when unpickling a pytd file fails.
+* Don't check Literals when expanding compatible builtins.
+* Fix a crash when applying a method decorator to a property.
+* Fix some off-by-one errors in sequence unpacking.
+* Fix a tuple addition crash.
+* Fix a crash in the indexer.
+
+Version 2022.05.19:
+
+Updates:
+* Default --enable-nested-classes to True. This flag will be removed in an
+  upcoming release.
+* Use argument-by-argument matching for PyTDFunction in simple cases.
+
+Bug fixes:
+* Load symbols from typing when converting parametrised collection classes.
+* Raise an error when referencing a nonexistent pyi file in another pyi file.
+* Take `__all__` into account when importing `*` in pyi files.
+* Support `from x import y` for stdlib modules in pickled pyi files.
+* Preprocess source code to augment bare annotations in functions.
+* Slightly change the format of the [signature-mismatch] error.
+* Switch resolution order for nested and top-level classes in AddNamePrefix.
+
+Version 2022.05.10:
+
+Bug fixes:
+* Improve the collections_abc overlay.
+* Raise an exception for typed dict errors rather than logging them immediately.
+* Reset matcher errors between individual parameter matches.
+* --overriding-return-type-checks: Allow method return types to be changed when
+  the overridden type is NoReturn.
+* Resolve GenericType nodes better in LookupLocalTypes.
+
+Version 2022.05.05:
+
+Updates:
+* Update typeshed pin to commit 354787f from Apr 8.
+* Remove --enable-typed-dicts, which has been a no-op since the last release.
+* Add a group of feature flags for checking compatibility of signatures for
+  overriding methods:
+  * --overriding-default-value-checks
+  * --overriding-parameter-count-checks
+  * --overriding-parameter-name-checks
+  * --overriding-parameter-type-checks
+  * --overriding-return-type-checks
+* Add code structure for gradual migration to argument-by-argument call
+  matching.
+
+Bug fixes:
+* Move a check out of --enable-nested-classes.
+* Fix spurious not-callable error for typing.OrderedDict.
+
+Version 2022.04.26:
+
+Updates:
+* Enable --enable-typed-dicts by default.
+
+Bug fixes:
+* Preserve the full name of imported TypedDicts.
+* Stop dropping TypedDict annotations from local assignments.
+* Don't mark fields of anonymous namedtuple parents as ClassVars.
+* Instantiate imported TypedDicts to typed_dict.TypedDict, not Instance.
+* Fix more typeshed circular dependency issues.
+
+Version 2022.04.22:
+
+Updates:
+* Add support for `|` for Dicts in 3.9.
+
+Bug fixes:
+* Make a collection of bug fixes needed for nested class support.
+* Handle attribute accesses on Final[...] constants from pyi files.
+* Remove collections.OrderedDict from pytype.
+* Remove duplicate NamedTuple class definition from typing.pytd.
+* Evaluate late annotations before checking for 'TypeVar not in scope' error.
+* Don't print Variable in error messages.
+* Represent namedargs as a python dict throughout.
+
+Version 2022.04.15:
+
+Updates:
+* Add basic Python 3.10 support.
+* Instantiate pyi namedtuples directly as interpreter classes. This is a large
+  refactoring that also made namedtuple type-checking more precise, exposing a
+  fair number of type errors in user code.
+* Remove the last traces of the no-longer-necessary --trace-all-classes flag.
+
+Bug fixes:
+* Allow __match_args__ in pyi files to be assigned a tuple value.
+* Fix a bug in looking up attributes defined via variable annotation.
+* Handle Unions better in byte_STORE_ATTR.
+* Fix an [unbound-type-param] error.
+* Call abstract.Dict.setitem directly when constructing a folded dict literal.
+
+Version 2022.04.06:
+
+Updates:
+* Default --trace-all-classes to True.
+* Add a --platform option to pytype.
+
+Bug fixes:
+* Fix for comparing recursive tuples for equality.
+* Do a better job of determining whether a typing(_extensions) import is
+  allowed.
+* Set TypedDict pyval items when instantiating a TypedDictClass.
+* Don't raise duplicate-keyword-argument for positional-only arguments.
+* Update definition of typing.get_type_hints.
+
+Version 2022.03.29:
+
+Updates:
+* Add support for literal enums.
+
+Bug fixes:
+* Apply a couple of user-proposed fixes to merge-pyi.
+* Handle subclasses in property_get.
+* Convert type aliases in pyi files to aliases instead of constants.
+* Generate new views when instantiating a value in output.py.
+* Support partial forward references in pyi files.
+
+Version 2022.03.21:
+
+Updates:
+* Support typing.TypeAlias.
+
+Bug fixes:
+* Fix a crash when reporting an error for an undefined value.
+* Fix TypedDictClass.instantiate(...) signature.
+* Fix matching of Final[T] against T for imported final constants.
+* Check IsVisible() before reporting errors in function.call_function.
+
+Version 2022.03.08:
+
+Updates:
+* New feature flags:
+  * --trace-all-classes: traces class creation for better analysis of class
+    bodies.
+  * --strict-primitive-comparisons: catches illegal types in comparisons
+    involving primitives.
+  Once these features are stable, the flags will be removed and their behavior
+  made the default.
+
+Bug fixes:
+* Catch type errors when folding constants.
+* Fix Callable argument count inconsistency for decorated instance methods.
+* Fix a caching bug that caused closure variables to be reused.
+* Still look up typing and typing_extensions types when reporting
+  not-supported-yet.
+* Parse Python 3.10's new line number table format.
+* Unpack ClassVar in constant_to_var so unions are handled correctly.
+* Handle `__getitem__` correctly for typed dicts passed as function args.
+* Allow using the `python3` executable if it matches the requested version.
+
+Version 2022.02.23:
+
+Bug fixes:
+* Add mising magic methods to typing.Counter.
+* Allow `<name>: Final = <Literal value>` in pyi files.
+* Ignore some private attributes when doing pyi star imports.
+
+Version 2022.02.17:
+
+New features and updates:
+* Update typeshed pin to commit fc60d02 from Feb 2.
+* Support positional-only parameters.
+
+Bug fixes:
+* Recognize type-annotated callables as attributes in attrs classes.
+* Python 3.9: fix crashes and bugs in directive handling.
+* Support ellipses when __future__.annotations enabled.
+* Support typed dicts in pyi files.
+* Fix an error when checking for `__getitem__` on a metaclass.
+* Remove TypedDict 'total' check that sometimes fires incorrectly.
+
+Version 2022.02.08:
+
+New features and updates:
+* Remove the --allow-recursive-types flag. Recursive types are now fully
+  supported and the behavior of this flag is enabled by default.
+
+Bug fixes:
+* Don't raise a final-error when analysing the same method repeatedly.
+* Get rid of an overly restrictive [not-callable] check in ParameterizedClass.
+* Strip "__init__" from module names when checking supported versions.
+* Finish a TODO in byte_GET_YIELD_FROM_ITER.
+
+Version 2022.01.31:
+
+New features and updates:
+* Support typing.final and typing.Final.
+* Rework directors.py's source parsing using LibCST.
+* Show error name in red in Linux-like environments.
+
+Bug fixes:
+* Add fixes for instantiating a typed dict from an annotation.
+* Prevent misfiring of "NoReturn is not allowed as inner type" error.
+* Defer checking of `Final` so that it can be used with `Annotated`.
+* Output typed dicts into the pyi file.
+
+Version 2022.01.13:
+
+New features and updates:
+* Make available an initial implementation of recursive type aliases with a
+  feature flag, --allow-recursive-types. Once this feature is stable, the flag
+  will be removed and its behavior made the default.
+* Allow using '...' as a top-level type annotation. This is an experimental
+  annotation that means "inferred type".
+
+Bug fixes:
+* Stop replacing unsubstituted type params in generic aliases with Any in stubs.
+* Better handle type aliases with multiple options.
+
+Version 2022.01.07:
+
+New features and updates:
+* Drop support for Python 3.6.
+* Make classmethod and staticmethod generic.
+
+Bug fixes:
+* Fix a load_pytd bug involving circular dependencies and star imports.
+
+Version 2022.01.05:
+
+New features and updates:
+* Add a feature flag, --enable-typed-dicts, for basic TypedDict support. Once
+  this feature is stable, the flag will be removed and its behavior made the
+  default.
+* Delete --fix-module-collisions flag. It has been a no-op since the last
+  release.
+* Add support for @attr.dataclass.
+* Add a 'recursive' attribute to pytd.LateType.
+* This is the last release that supports Python 3.6. Starting from the next
+  release, pytype will only support Python 3.7+.
+
+Bug fixes:
+* Don't report an unhelpful name error when YIELD_FROM yields nothing.
+* Downgrade 'no MAKE_FUNCTION opcode found for decorator' to a warning.
+* Improve an [invalid-annotation] error message.
+* Fix a bug in parameterizing a generic type alias with a TypeVar.
+* Fix ParamSpec bugs that are blocking typeshed.
+
+Version 2021.12.15:
+
+New features and updates:
+* Enable --fix-module-collisions by default and make the flag a no-op. It will
+  be removed in the next release.
+
+Bug fixes:
+* Fix a bug in resolving dotted name types in load_pytd.
+* Fix a Python 3.9 issue with `# pytype: disable=attribute-error` line numbers.
+* Eliminate some spurious 'TypeVar not in scope' errors.
+* Stop reporting weird name errors for ".0".
+
+Version 2021.12.08:
+
+New features and updates:
+* Update typeshed pin to commit 3b6a52b from Nov 29.
+
+Bug fixes:
+* Recognize typing_extensions.SupportsIndex as a protocol.
+* Allow summing anything with an __add__ method.
+* Remove pytd optimizations that broke overloads.
+* Fix a crash in --protocols mode.
+* Add object.__dir__ to builtins.pytd.
+
+Version 2021.11.29:
+
+Bug fixes:
+* Pass feature flags to the INFER command.
+
+Version 2021.11.24:
+
+New features and updates:
+* Update typeshed pin to commit 7cc5eb2 from Aug 8.
+* Remove pytype's ability to accept python_version=3.
+* Rename pytype "master" branch to "main".
+* Remove the --gen-stub-imports flag. This was a no-op as of version 2021.11.18.
+* Look up local names in nested class scopes when importing pyi files.
+* Consistently use "base" instead of "parent" to refer to base classes. This
+  changes the pickled representation of pytd.Class.
+
+Bug fixes:
+* Check for multiple module-level `__getattr__` overloads.
+* Raise a not supported error for constructors in type annotations in pyi files.
+* Fix a [not-instantiable] false positive.
+* Add a feature flag, --fix-module-collisions, to fix a 'duplicate top-level
+  identifier' pyi issue.
+* Don't enforce @abstractmethod and @coroutine consistency on properties.
+
+Version 2021.11.18:
+
+New features and updates:
+* Enable --gen-stub-imports by default and make the flag a no-op. It will be
+  removed in the next release.
+* Pass more precise argument types to contextmanager __exit__ methods.
+* Add a helpful error message for use-after-delete.
+
+Bug fixes:
+* Recognize "/dev/null" as a package path in load_pytd.
+* Remove references to the `__builtin__` module.
+* Allow disables for invalid calls in 3.9 to be put on the same lines as in 3.7.
+
+Version 2021.11.12:
+
+New features and updates:
+* Use the official pyi files from attrs.
+* Report a type error when comparing types (e.g. int > str) and when calling an
+  overloaded comparison method like __gt__ fails.
+* Ship Linux AArch64 wheels.
+
+Bug fixes:
+* Use a homogeneous tuple as a pytd node sort key.
+* Fix crash in pytd.Lookup caused by ClassType with unfilled cls pointer.
+* Fix a pytd printer bug that was causing us to print 'Optional[import ...]'.
+* Fix a pytype bug in matching Literal against Literal.
+* Fix a bug in which classmethods weren't detected as protocol members.
+* --use-enum-overlay:
+  * Only add `__new__` to an enum if it has members to lookup.
+  * Skip potential enum members that are functions or have dunder names.
+  * Teach the enum overlay what a descriptor is.
+* --allow-recursive-types:
+  * Fix infinite recursion in vm.init_class.
+  * Support recursive types in sub_one_annotation.
+  * Add support in visitors.LookupLocalTypes.
+
+Version 2021.11.02:
+
+New features and updates:
+* Remove the --bind-properties flag. Its behavior has been made the default.
+* Take advantage of module aliases to print prettier stub files.
+* Add support for cross-module attr.s wrappers.
+* Add a feature flag, --gen-stub-imports, to improve pyi import handling.
+* Add a bit more support for PEP 612 in stubs.
+
+Bug fixes:
+* Add remove{prefix,suffix} methods for bytes, bytearray.
+* Fix a bug where Errorlog.copy_from() duplicated error details.
+* Fix some issues with handling module aliases in stub files.
+* Support a [not-supported-yet] case in a generic class TypeVar renaming check.
+* Add `__init__` attributes to canonical enum members.
+
+Version 2021.10.25:
+
+New features and updates:
+* Completely remove the --preserve-union-macros flag. This was a no-op as of
+  version 2021.10.17.
+* Add a new flag, --build-dict-literals-from-kwargs, to construct dict literals
+  for `dict(k=v, ...)`. This behavior will ultimately by enabled by default and
+  the flag removed.
+* Add a new flag, --strict_namedtuple_checks, for typing.NamedTuple and
+  collections.namedtuple to inherit from fixed-length tuples. This behavior will
+  ultimately be enabled by default and the flag removed.
+
+Bug fixes:
+* Fix how the enum overlay calls `base_type.__new__`.
+* Improve how the enum overlay chooses base types.
+* When an `attr.ib()` call has type errors, construct the attrib anyway.
+* Support builtin str removeprefix/removesuffix.
+
+Version 2021.10.18
+
+New features and updates:
+* Completely remove the --attribute-variable-annotations flag. This was a no-op
+  as of version 2021.10.11.
+* Enable --preserve-union-macros by default and make the flag a no-op. It will
+  be removed in the next release.
+
+Bug fixes:
+* Enum overlay: fix crash due to loading `__new__` from a PyTDClass.
+* Enum overlay: use ClassVar to differentiate enum class attributes.
+* Fix a parser bug involving nested class name conflicts.
+* Fix a crash when lazily loading a missing submodule.
+* Change PrintVisitor to group explicit imports with the ones collected from
+  type annotations.
+
+Version 2021.10.11
+
+New features and updates:
+* Update pytype and typing annotation stubs for features added in attrs 21.1.0.
+* Enable --attribute-variable-annotations by default and make the flag a no-op.
+  It will be removed in the next release.
+* The --use-enum-overlay flag is ready for general use. Enable this flag for
+  precise typing of the stdlib enum library.
+
+Bug fixes:
+* Support quoted types as annotations in pyi files.
+* Add precise overloads for the map function.
+* Support Ellipsis annotations in pyi files.
+* Preserve None in unions containing Any.
+* Fix a pyi import printing bug.
+* Improve ignored-abstractmethod error message.
+* Teach convert._load_late_type to handle nested classes.
+
+Version 2021.10.04
+
+Bug fixes:
+* Call init_class instead of instantiate when adding assertIsInstance bindings.
+* Use the namedtuple 'defaults' argument when generating __new__ signature.
+* Do not raise a parser error for unrecognised decorators.
+* Merge BaseValue.cls and BaseValue.get_class().
+* Check Instance.maybe_missing_members earlier during attribute access.
+* Fix a bug in matching callables with TypeVar parameters.
+
+Version 2021.09.27
+
+New features and updates:
+* Drop target Python 3.5 support.
+* Remove the no-op --enforce-noniterable-strings flag.
+* Support arbitrary python values for typing.Annotated in pyi files.
+* Add more extensive type support for attr converters.
+
+Bug fixes:
+* Preserve named args in a function call when we have **kwargs in the arglist.
+* Allow assertIsInstance to take a tuple of classes.
+* Fix a bug in matching a Union against a TypeVar.
+* Attach a line number to function call errors caused by annotating self.
+* Add some missing namedtuple args.
+
+Version 2021.09.09
+
+New features and updates:
+* Enable --enforce-noniterable-strings by default and make the flag a no-op. It
+  will be removed in the next release.
+* Narrow the types of local variables based on test assertions.
+* For bad return type annotations on generators, change invalid-type-annotation
+  to bad-yield-annotation error.
+* Slightly improve pytype's performance on a trivial file.
+
+Bug fixes:
+* Fix our type definition for BaseException.with_traceback().
+* Add some missing 3.8 methods to typing stubs.
+* Add `breakpoint` to the supported builtin methods.
+* Fix a bug in pytype's handling of late annotations.
+* Typeshed: fix version parsing regex.
+
+Version 2021.08.24
+
+New features and updates:
+* Update typeshed pin to commit 8da23e0 from July 30.
+* Remove all Python 2 compatibility code.
+* Print method signatures in the error message for a protocol type mismatch.
+* Raise an error when comparing incompatible primitive types.
+
+Bug fixes:
+* Fix bugs in constant folding of f-strings.
+* Fix a bug where typing_extensions.Protocol was treated as Any.
+* Emit a pyi-error for an invalid annotation in a pyi file instead of crashing.
+* Add an extra check to forbid matching Mapping too broadly.
+
+Version 2021.08.11
+
+New features and updates:
+* Stop supporting target Python 2.
+* Enable constant folding, a performance optimization that significantly speeds
+  up analysis of large data structure literals.
+
+Bug fixes:
+* Replace ParamSpec.{args,kwargs} with Any.
+
+Version 2021.08.03
+
+New features and updates:
+* This is the last release of pytype that supports analyzing code in Python 2.7.
+  From the next release onward, pytype will only support Python 3.5+.
+* Add a typing FAQ.
+* Add a pytype_extensions.Dataclass protocol for matching any dataclass.
+
+Bug fixes:
+* Use [invalid-annotation] rather than [not-supported-yet] to report stray
+  TypeVars in variable annotations.
+* Fix bugs in attribute matching for Protocol.
+* Fix a bug in pytype's import resolution for relative imports.
+
+Version 2021.07.27
+
+New features and updates:
+* Add more detailed [name-error] messages for UnboundLocalError and the like.
+* Remove --check-parameter-types. Its behavior has been the default since
+  version 2021.07.19.
+* Support generic namedtuples.
+* Fix bugs and add features for --use-enum-overlay.
+* Add a flag, --enforce-noniterable-strings, that forbids implicit iteration
+  over strings.
+* Add support for attr converters.
+
+Bug fixes:
+* Get rid of a spurious 'appear only once in signature' TypeVar error.
+* Fix a few protocol matching bugs.
+* Fix exception handling bugs by tracking the frame state within
+  try/except/finally blocks.
+
+Version 2021.07.19
+
+New features and updates:
+* Add a flag, --use-enum-overlay, for greatly improved support for the stdlib
+  enum library. The behavior of this flag will be enabled by default once it is
+  stable.
+* Default --check-parameter-types to True.
+* Take advantage of submodule version information in typeshed/stdlib/VERSIONS.
+* typing.Protocol: support non-method attributes and modules, make error
+  messages more detailed, and fix several bugs.
+* Remove --create-pyi-dataclasses and make its behavior the default.
+* Do not try doing dead block elimination within try/except blocks.
+
+Bug fixes:
+* Handle unions correctly when dealing with exception types.
+* Support adding typing.Mapping as a chex.dataclass base class.
+* Get rid of some incorrect 'appears only once in signature' TypeVar errors.
+* Fix a pyi error caused by _PropertyToConstant not recognizing imported
+  TypeVars.
+* Allow more cases of valid typevars in variable annotations, typing.cast, and
+  attr.ib's 'type' argument.
+* Allow bound class methods to match object.
+* Allow bytearray.__contains__ to accept bytes.
+
+Version 2021.06.17
+
+New features and updates:
+* Open source pytype_extensions, a library of type system extensions for use
+  with pytype.
+* Add an assert_type statement to assert pytype's view of an expression type.
+* Remove the [key-error] error class: it found few real type errors and produced
+  many false positives.
+
+Bug fixes:
+* Fix a bug that caused 'self' to be typed as 'Any' in @property bodies
+  (temporarily requires --bind-properties flag).
+* Add support for multiple and chained assignments in pyi files.
+* Support the 'Protocol[T, ...]' shorthand for generic protocols.
+* Typeshed: support py2-only third-party packages with no top-level stubs.
+
+Version 2021.05.25
+
+New features and updates:
+* Add support for referencing class-scoped TypeVars in variable annotations.
+* Add support for generic dataclasses and attrs.
+
+Bug fixes:
+* Fix a performance regression in pytype/pytd/typeshed.py.
+* Generate mutations from __init__ parameter annotations in stubs.
+* Use the typeshed stub for the array module instead of a custom one.
+
+Version 2021.05.19
+
+New features and updates:
+* Add support for PEP 604 (Union |) in stub files.
+
+Bug fixes:
+* Get rid of special_builtins.Filter.
+* Fix circular import issues in the pytd loader.
+
+Version 2021.05.14
+
+New features and updates:
+* Allow TypeGuard to be used in type stubs by rewriting TypeGuard[X] to bool.
+
+Bug fixes:
+* Fix the order of inherited attributes for dataclasses.
+* Change the type of __path__ from Iterable to List.
+* Add a replace() method to flax dataclasses.
+
+Version 2021.05.11
+
+Bug fixes:
+* Report [not-supported-yet] instead of [import-error] for importing TypedDict.
+* Fix a bug in attribute lookup from parent classes.
+* Fix a Python 3.7 failure in typeshed/tests/pytype_test.py.
+* pytd: populated mutated_type from annotated `self` parameters.
+* Preserve kw_only attribute when inheriting attrs from a different module.
+* Add a vm state to allow recursive construction of pytd values.
+
+Version 2021.05.06
+
+New features and updates:
+* Update typeshed pin to commit 2c8cb60 from Apr 27.
+
+Bug fixes:
+* Add typing._Alias.
+* Pin attrs to 20.3.0.
+
+Version 2021.05.04
+
+New features and updates:
+* Remove --check-attribute-types, --check-container-types, and
+  --check-variable-types flags. Their behaviors are now enabled by default.
+* Add a temporary --preserve-union-macros flag that preserves Union generic type
+  aliases in type stubs. This behavior will ultimately be enabled by default and
+  the flag removed.
+* Support max versions in typeshed VERSIONS file.
+
+Bug fixes:
+* Add typing.GenericMeta stub.
+* Fix handling of typeshed/stdlib/@python2.
+
+Version 2021.04.26
+
+New features and updates:
+* Enable --check-attribute-types, --check-container-types, and
+  --check-variable-types by default. These flags will soon be removed.
+* Add a fix suggestion for [annotation-type-mismatch] with a None value.
+* Add a temporary --attribute-variable-annotations flag that applies PEP
+  526-style annotations on attribute assignments. This behavior will ultimately
+  be enabled by default and the flag removed.
+* Add a temporary --create-pyi-dataclasses flag that creates dataclasses from
+  @dataclass-annotated classes in type stubs. This behavior will ultimately be
+  enabled by default and the flag removed.
+
+Bug fixes:
+* Don't lose track of attributes when @typing.final is used.
+* Fix generation of type information for nested typing.NamedTuple classes.
+* Fix some bugs in handling of generic type aliases.
+* Fix a pytype crash on a generic protocol.
+* For method aliasing in pyi files, consider base classes when doing lookup.
+
+Version 2021.04.15
+
+New features and updates:
+* Update typeshed pin to commit ce24720 from Jan 27, and drop support for the
+  old typeshed directory structure.
+* Delete the --check-nonnull-parameter-types flag.
+
+Bug fixes:
+* Add "from typing import overload" statement when using @overload.
+* Add object.__delattr__ to our builtins stubs.
+* Add some more support for generic type aliases.
+
+Version 2021.04.09
+
+New features and updates:
+* Enable --check-parameter-types by default for non-None default values.
+* Add some minimal support for PEP 612 in type stubs.
+* Add support for typing.Annotated in pyi files.
+
+Bug fixes:
+* Fix a crash when analysed code accessed an undefined closure cell.
+* Fix a minor bug in pytype's expansion of Protocol[T].
+* Check starargs and starstarargs when gathering TypeVars in function sigs.
+* Fix some bugs in pytype's handling of the new typeshed directory structure.
+* Make sure `collections.defaultdict.__init__` always accepts kwargs.
+* Filter out properties from class attributes when constructing dataclasses.
+* Add gi_* fields to Generators.
+
+Version 2021.04.01
+
+New features and updates:
+* Add basic Python 3.9 support.
+
+Bug fixes:
+* Fully support method aliasing in stub files.
+* Improve pytype's handling of sets.
+
+Version 2021.03.22
+
+New features and updates:
+* Support inheritance from dataclasses defined in pyi files.
+
+Bug fixes:
+* Don't check attribute values against types from pyi files.
+* Add a missing array.array.frombytes method.
+* Fix the pyi type of attributes annotated with class type parameters.
+* Allow annotation-type-mismatch directives to be put on more sensible lines.
+* Pass ninja relative paths instead of absolute ones.
+
+Version 2021.03.10
+
+New features and updates:
+* Basic support for defining dataclasses in pyi files.
+* Enable more of --check-attribute-types by default.
+* Get rid of the legacy pyi parser.
+
+Bug fixes:
+* Fix a circular import error (#760).
+* Make NotImplementedType inherit from bool.
+* Fix a caching bug that caused incorrect function parameter defaults.
+
+Version 2021.03.03
+
+New features and updates:
+* Enable part of --check-attribute-types by default.
+
+Bug fixes:
+* Allow callable constants to match protocol methods.
+* Allow builtins.tuple to be used for a heterogeneous tuple annotation.
+* Don't report [not-instantiable] when instantiating an abstract annotation.
+* Take a TypeVar's bound into account when instantiating it in attribute.py.
+* Use typeshed stubs in preference to empty stubs.
+* Fix a bug where multiple definitions of a TypeVar could end up in a stub.
+* Fix a caching bug in check_container_types.
+* Fix initialization of Union types in forward references.
+
+Version 2021.02.23
+
+New features and updates:
+* Support running pytype under Python 3.9. (Does not yet support analyzing 3.9
+  code; see details in https://github.com/google/pytype/pull/840.)
+* Update typeshed pin to commit 869238e from Jan 26.
+
+Bug fixes:
+* Do stricter filtering of container_type_mismatch errors.
+* Preserve the concrete value of TYPE_CHECKING in method bodies.
+* Support using collections.abc.Callable in type stubs.
+
+Version 2021.02.19
+
+Bug fixes:
+* Fix 'nothing' parameter inference for self in custom generic classes.
+* Fix several cases of class type parameters being instantiated incorrectly.
+* Fix an if-splitting bug by (mostly) ignoring cycles in the CFG.
+* Use match_var_against_type, not match_from_mro, for check_container_types.
+
+Version 2021.02.09
+
+New features and updates:
+* Replace namedtuples with attrs in our PyTD representation.
+
+Bug fixes:
+* Improve error messaging for typing.AnyStr.
+* Fully qualify `std::size_t` to avoid platform incompatibilities.
+* Add isascii attribute to str, bytes, and bytearray.
+* Support isinstance() checks on tuples of typing containers.
+* Improve *args and **kwargs forwarding for attrs and dataclasses.
+* Don't propagate attribute errors for deleted names.
+
+Version 2021.01.28
+
+New features:
+* Update typeshed pin to commit 8c20938 from Nov 13.
+* Implement basic support for PEP 593.
+* Support typeshed's new directory structure.
+
+Bug fixes:
+* Support aliases attr.attrs for attr.s, and attr.attrib for attr.ib.
+* --check-container-types: fix a crash and improve the error message.
+
+Version 2021.01.21
+* Switch to a typed_ast-based stub parser.
+* Fix matching of NamedType against LiteralType in --protocols mode.
+* Fix: super() in a list comprehension needs to look at the enclosing frame.
+
+Version 2021.01.14
+* Fix some corner cases with unpacking and function args.
+* Add ImportError attributes name, path for Python 3.3+.
+* Unbreak annotate-ast by adding an empty pytype/ast/__init__.py file.
+
+Version 2021.01.08
+* Automatically add a .gitignore file to the pytype output directory.
+* Do not allow python keywords in pytd files.
+* Fix: Don't infer Callable parameters when there are kwonly params.
+* Fix: Represent empty tuples as TupleType(()).
+* Fix: add __init__ and __contains__ to dict view classes.
+
+Version 2020.12.23
+* Support using a union to filter types out of a type parameter.
+* Fix the attribute type obtained from `attr.ib(default=())`.
+
+Version 2020.12.16
+* Support NewType in stubs.
+* Treat classes whose metaclass inherits from type(Protocol) as abstract.
+* Automatically promote __init_subclass__ to a classmethod.
+* Improve unpacking and function arg matching by tracking unpacked iterables.
+* Fix a [name-error] caused by a bad regex check for comprehensions.
+* Strip carriage returns from files read as bytes.
+* Support using an AnnotationClass in an isinstance check.
+* Support aliases to methods of classes in the same module in the pyi parser.
+
+Version 2020.12.02
+* Update typeshed pin to commit fae6bda from October 12.
+* Improve the [bad-return-type] error message.
+
+Version 2020.11.23
+* Treat modules as hashable.
+* Support typing_extensions.Literal in source files.
+* Take classmethods and staticmethods into account in protocols.
+
+Version 2020.11.12
+* Support `# type: ignore[errorcode, ...]` in pyi files.
+* Always allow classes to match typing.Hashable.
+* Fix a bug in pytype's handling of Literal[<str>].
+
+Version 2020.11.03
+* Drop support for running pytype under Python 3.5.
+* Add a dependency on pybind11 for new typegraph metrics.
+* merge-pyi support for "import collections.abc as abc" style imports.
+
+Version 2020.10.08
+* Add runtime_checkable to typing.pytd.
+
+Version 2020.09.29
+* Fix a bug in attaching function type comments to opcodes.
+* Use `py -x.y` instead of `pythonx.y` for windows.
+
+Version 2020.09.24
+* Fix a bug involving multiple super calls.
+* Support tuple slicing.
+* Make all tests pass in Python 3.8.
+* Respect all typing re-exports in the pyi parser.
+* Create C++ metrics classes for tracking typegraph metrics.
+* Update attrs pytd files to support version 20.2.0.
+
+Version 2020.09.16
+* Fix a parser bug when importing and re-exporting a submodule.
+* Call `python -m ninja` instead of `ninja`.
+* Don't crash when processing a pyi containing __all__.
+* Convert Bindings() to a list in cfg.py.
+
+Version 2020.09.14
+* Drop the --python_exe option.
+* Have check_py and generate_pyi accept a source string instead of a filename.
+* Pass around an options.open_function that is used in place of builtins.open.
+* Fix some Python 3.8 bugs.
+* Fix python-incompatible syntax in pytd files.
+* Print 'leaving directory' after ninja command.
+* Support sys.version_info tuple checks that do not use slicing.
+
+Version 2020.08.28
+* Let multiple PyTDFunction signatures match when *args/**kwargs is present.
+
+Version 2020.08.17
+* Allow `# type: ignore` in more places in pyi files.
+* Support TypedDict function-based syntax in pyi files.
+* Add more developer documentation.
+
+Version 2020.08.10
+* Support aliases to unions with type parameters.
+* Don't crash when a nested NamedTuple subclass hits max depth.
+* Support kw_only arg to attr.ib.
+* Add more developer documentation.
+
+Version 2020.07.30
+* Allow typing.AnyStr to be used to parameterize custom generic classes.
+* FIX: We were occasionally reusing an exhausted generator in Union constructor.
+* Support imported type macros in pyi files.
+* When raising not-supported-yet for Alias = Union[T, ...] set the type to Any.
+
+Version 2020.07.24
+* pyi parser: allow aliases inside a class to values outside the class.
+* Copy annotations instead of modifying them when adding a scope.
+* Make self.__class__ return Any in __init__.
+* Check object visibility before setting attributes.
+
+Version 2020.07.20
+* pyi parser: support importing TypedDict from typing_extensions.
+
+Version 2020.07.14
+* Populate the `cls` arg in classmethods with the class type.
+* Log [not-supported-yet] as soon as a recursive type alias is defined.
+* pyi parser: allow the 'total' keyword for subclasses of TypedDict.
+* Make collections.OrderedDict reversible.
+* Make the behavior of io.open match builtins.open.
+* Add/fix some opcodes for Python 3.8.
+
+Version 2020.06.26
+* Treat objects as True in a boolean context, unless explicitly overridden.
+* If cls is the class argument of Foo.__new__, treat `cls is Foo` as ambiguous.
+* Add basic support for third-party flax dataclasses.
+* Autodetect number of jobs with --jobs auto.
+
+Version 2020.06.01
+* Update typeshed pin to commit 5fe6a5b from May 18.
+* Support callback protocols.
+* Get rid of the RemoveInheritedMethods pyi optimisation.
+* (In-progress) Add partial Python 3.8 support.
+
+Version 2020.05.13
+* Check attrs default values against annotations.
+* Add an experimental --check-variable-types mode.
+
+Version 2020.05.07
+* Drop support for analyzing Python 3.4.
+* Add special builtins support for filter(None, xs).
+* Open-source a developer doc on minor version upgrades.
+* Improve support for @typing.overload.
+* Improve annotated decorators' handling of classes.
+
+Version 2020.04.22
+* Drop support for running pytype under Python 2.
+* Report [not-supported-yet] when aliasing Union[T, ...].
+* Add typing.OrderedDict.
+* Improve how annotations are tracked and applied.
+* Allow functions to match types.FunctionType.
+* Don't report [invalid-typevar] when type() is called on a TypeVar.
+
+Version 2020.04.01
+* Do some test restructuring and cleanup.
+
+Version 2020.03.19
+* Fix a couple of pytype crashes.
+* Do not allow mixing string types in IO.write() in Python 3.
+
+Version 2020.02.20
+* Stop rewriting (x: X = None) to (x: Optional[X] = None).
+
+Version 2020.02.06
+* Update typeshed pin to commit d5851ec from January 24.
+
+Version 2020.01.24
+* Don't fail on mypy-style '# type: ignore[code, ...]' comments.
+* Support separating disabled error classes by whitespace in addition to commas.
+
+Version 2020.01.08
+* Support @typing.type_check_only on classes and functions in pyi files.
+
+Version 2020.01.07
+* Add a 2020 Q1 roadmap.
+* Improve handling of forward references with type errors.
+
+Version 2019.12.17
+* Improve support for forward references and function type comments.
+* Support typing.ClassVar and dataclasses.InitVar.
+* Fix some attrs and dataclasses bugs.
+
+Version 2019.12.06
+* Update typeshed pin to commit f7f6860 from December 1.
+* Allow running pytype-single as `python -m pytype-single`.
+
+Version 2019.11.27
+* Support using typing.Counter as a generic.
+* Handle non-utf8 string literals without crashing in host Python 3.
+* Allow running pytype as `python -m pytype`.
+* Add a `-j/--jobs` option to pytype.
+* Detect and raise errors for recursive type aliases, rather than crashing.
+
+Version 2019.10.17
+* Make Python 2 metaclass declarations an error in Python 3.
+* Add basic support for dataclasses.
+* Open-source a partial numpy type stub.
+* Fix some bugs in the pyi parser.
+
+Version 2019.09.17
+* Update typeshed pin to commit 668988f from September 5.
+
+Version 2019.09.06
+* Update typeshed pin to commit ce0f5b2 from August 22.
+
+Version 2019.08.29
+* Improve the usability of the pytype.io module.
+* Add basic callgraph generation to pytype.tools.xref.
+* Update typeshed pin to commit fab2ee0 from August 16.
+* Add an experimental --precise-return mode.
+
+Version 2019.08.09
+* Partially support typing[_extensions].Literal in pyi files.
+* Adopt a unicode pytype logo.
+* Add a traces library for accessing pytype's inferred type information.
+* Add `annotate-ast` subtool for annotating ASTs with type information (WIP).
+
+Version 2019.07.30
+* Allow trailing commas in lists in type stubs.
+
+Version 2019.07.26
+* Update typeshed pin to commit 40215d1 from July 18.
+* Improve support for subprocess.Popen in Python 3.
+
+Version 2019.07.11
+* Update typeshed pin to commit e1e5c83 from July 1.
+* Support `async def` in pyi files.
+
+Version 2019.06.28
+* Fix attrs bugs.
+* Check exception types in `except` blocks.
+
+Version 2019.06.21
+* Support typing.overload in source files.
+* Fix merge-pyi bugs.
+* Support basic attrs usage.
+
+Version 2019.05.31
+* Add an xref output mode that creates a (lineno, column) -> type map.
+* Fix an AnyStr bug in the Python 2 filter() definitions.
+
+Version 2019.05.24
+* Fix an import bug.
+* Support extracting pytype types from xref.
+
+Version 2019.05.15
+* Update typeshed pin to commit 50d98ac from May 13.
+* Support nested classes in pyi files.
+
+Version 2019.05.08
+* Fix a bug in pyi lookup of re-exported imports.
+
+Version 2019.05.06
+* Update typeshed pin to commit 4e572ae from April 23.
+* Support collections.namedtuple in pyi files.
+* Support module aliases in pyi files.
+
+Version 2019.04.26
+* Improve typegraph performance.
+
+Version 2019.04.19
+* Support method matching for custom PEP 544 protocols.
+
+Version 2019.04.12
+* Update typeshed pin to commit cfa65b8 from April 8.
+* Fix comparisons of primitive objects of the same type.
+* Limit the number of tracebacks shown for one error.
+
+Version 2019.04.05
+* Improve Python 3 definitions in pytype's enum and typing stubs.
+
+Version 2019.04.02.1
+* Require typed_ast only in Python 3.3+.
+
+Version 2019.04.02
+* Simplify the text pytype prints to the terminal.
+* Rename the default pytype output directory from pytype_output to .pytype.
+* Add a --no-cache option to send pytype output to a temporary directory.
+* Update typeshed pin to commit 9b9ff64 from March 29.
+* Support typing.ChainMap and typing.Counter.
+
+Version 2019.03.27
+* Support `# type: ignore` on import lines in pyi files.
+
+Version 2019.03.21
+* Update typeshed pin to commit afe6656 from March 16.
+* Add missing Python 3 methods {bytearray,list}.{clear,copy}.
+
+Version 2019.03.15
+* Make --parse-pyi verify that the AST has been resolved.
+* Fix pyi parsing of `typing` aliases.
+* Remove mirror of asyncio.tasks stub in favor of the canonical typeshed one.
+* Support type macros in pyi files.
+
+Version 2019.03.08
+* Fix bad type definitions for builtins reversed and enumerate.
+
+Version 2019.03.01
+* Make pytype's type stubs loadable in Python 3.4.
+
+Version 2019.02.13
+* Support asynchronous generators.
+* Fix variable annotations in Python 3.7.
+* Fix a pyi circular import bug.
+
+Version 2019.01.30
+* Support future.utils.with_metaclass.
+* Support coroutine annotation.
+
+Version 2019.01.18
+* Add support for unittest.TestCase.setUp().
+* Open-source a user guide.
+* Open-source the FAQ.
+
+Version 2018.12.21
+* Improve support and add testing framework for target Python 3.7.
+* Handle files that generate parse errors more gracefully.
+
+Version 2018.12.11
+* Add rudimentary support for target Python 3.7.
+* Make error messages for Python operators friendlier.
+* Set the default target python version to the host version.
+* Change default behavior to stop at first error and add a --keep-going option.
+* Flag annotations with the wrong parameter count and invalid uses of NoReturn.
+* Improve pytype and merge-pyi status messages.
+* Support PEP-526 variable annotation syntax.
+
+Version 2018.11.06
+* Use --imports_info to allow preserving generated type stubs between runs.
+* Handle TypeParameter inheritance more robustly with a union-find approach.
+* Get more precise deps from importlab to allow build parallelization.
+* Trim the dependencies of builtin and system files from the import graph.
+* Generate a build.ninja file and call pytype-single via ninja.
+
+Version 2018.10.30
+* Improve the display of tracebacks in error messages.
+* Make several Python 3 fixes and improvements, including better enum support.
+* Fix evaluation of conditionals inside closures.
+* Improve handling of comparison operators.
+* Add a --strict-import option to not load submodules not explicitly imported.
+
+Version 2018.09.26
+* Generate default type stubs for pip-installed dependencies.
+* Remove the output directory at the start of each pytype run.
+
+Version 2018.09.25
+* Improve Python 3 varargs and kwargs support.
+* Support user-defined generic types.
+* Improve --generate-config to show a full sample config file.
+
+Version 2018.09.19
+* Allow the command-line `inputs` option to be specified in a config file.
+* Support hidden files.
+* Make the behavior of --exclude more intuitive.
+
+Version 2018.09.18
+* Support setting --exclude in a config file.
+* Add support for annotations in inner functions.
+* Officially support running under Python 3.7.
+
+Version 2018.09.07.1
+* Update typeshed pin to commit c968124 from September 6.
+
+Version 2018.09.07
+* Make typing.NamedTuple a class for Python 3.6+.
+
+Version 2018.08.10
+* Add --exclude flag to support excluding files or directories from analysis.
+
+Version 2018.07.13
+* Improve type checking of typing.Generator.
+* Enable logging from C++ in debug builds.
+* Expose pytype-single's return code.
+* Add the ability to record trace data during bytecode execution.
+
+Version 2018.06.19
+* Tweak the installation instructions and add a quickstart guide.
+
+Version 2018.06.18
+* Document pytype's platform support.
+
+Version 2018.06.15
+* Officially support running under Python 3.5 and 3.6.
+* Expose pytype-single's --version option.
+* Optimization: skip argument parameter combinations we've already seen.
+* Bring back pytype-single's --timeout option.
+* Add --return-success to pytype-single to report errors but return success.
+
+Version 2018.06.05
+* Print transient progress messages.
+* Rename pytype to pytype-single and pytype-all to pytype.
+* Use the system and site package dependencies found by importlab in pytype-all.
+* Make the pytype-all help message friendlier.
+* Allow pytype-single args to be specified in a config file.
+* Add a merge-pyi subtool to merge pyi files into their Python sources.
+* Expose some pytype-single options to pytype-all.
+* Add a script which runs pytype tests.
+* Allow specifying config file variables for pytype-all on the command line.
+* Add a --version option to display the pytype version.
+
+Version 2018.05.22.1
+* Use different flags when compiling with gcc or clang.
+
+Version 2018.05.22
+* Add flags for building with clang on Mac OS X.
+* Allow pytype-all to accept directories as input.
+* Change pytype-all's config file to INI style, and fall back to setup.cfg.
+* Make analyze_annotated a command-line option.
+* Add pythonpath guessing to pytype-all.
+
+Version 2018.05.15
+* Make some fixes to the release packaging.
+
+Version 2018.05.14
+* Release pytype-all.
+
+Version 0.2
+* Release pytype.

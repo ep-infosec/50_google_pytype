@@ -1,0 +1,733 @@
+add_package()
+
+py_library(
+  NAME
+    api
+  DEPS
+    .config
+    .errors
+    .io
+)
+
+toplevel_py_binary(
+  NAME
+    pytype-single
+  SRCS
+    single.py
+  MAIN
+    single.py
+  DEPS
+    .pytype_main_deps
+)
+
+py_library(
+  NAME
+    libvm
+  DEPS
+    .__version__
+    .analyze
+    .annotation_utils
+    .attribute
+    .blocks
+    .compare
+    .config
+    .context
+    .convert
+    .convert_structural
+    .debug
+    .errors
+    .imports_map_loader
+    .io
+    .load_pytd
+    .matcher
+    .metaclass
+    .output
+    .special_builtins
+    .state
+    .tracer_vm
+    .vm
+    pytype.directors.directors
+)
+
+py_library(
+  NAME
+    utils
+  DEPS
+    ._utils
+    .datatypes
+    .file_utils
+    .metrics
+    .module_utils
+    .pytype_source_utils
+)
+
+py_library(
+  NAME
+    analyze
+  SRCS
+    analyze.py
+  DEPS
+    .context
+    .convert_structural
+    .debug
+    .errors
+    .metrics
+    pytype.abstract.abstract
+    pytype.pytd.pytd
+)
+
+py_library(
+  NAME
+    annotation_utils
+  SRCS
+    annotation_utils.py
+  DEPS
+    ._utils
+    .state
+    pytype.abstract.abstract
+    pytype.overlays.overlays
+    pytype.pytd.pytd
+    pytype.typegraph.cfg
+)
+
+py_library(
+  NAME
+    attribute
+  SRCS
+    attribute.py
+  DEPS
+    ._utils
+    .datatypes
+    .special_builtins
+    pytype.abstract.abstract
+    pytype.overlays.overlays
+    pytype.typegraph.cfg
+)
+
+py_library(
+  NAME
+    blocks
+  SRCS
+    blocks.py
+  DEPS
+    pytype.pyc.pyc
+    pytype.typegraph.cfg_utils
+)
+
+py_library(
+  NAME
+    compare
+  SRCS
+    compare.py
+  DEPS
+    pytype.abstract.abstract
+    pytype.pytd.pytd
+)
+
+py_library(
+  NAME
+    config
+  SRCS
+    config.py
+  DEPS
+    ._utils
+    .datatypes
+    .errors
+    .file_utils
+    .imports_map_loader
+    .module_utils
+    pytype.pyc.pyc
+    pytype.typegraph.cfg_utils
+)
+
+py_library(
+  NAME
+    constant_folding
+  SRCS
+    constant_folding.py
+  DEPS
+    pytype.pyc.pyc
+)
+
+py_library(
+  NAME
+    convert
+  SRCS
+    convert.py
+  DEPS
+    ._utils
+    .blocks
+    .datatypes
+    .special_builtins
+    pytype.abstract.abstract
+    pytype.overlays.overlays
+    pytype.pyc.pyc
+    pytype.pyi.parser
+    pytype.pytd.pytd
+    pytype.pytd.parse.parse
+    pytype.typegraph.cfg
+)
+
+py_library(
+  NAME
+    context
+  SRCS
+    context.py
+  DEPS
+    .annotation_utils
+    .attribute
+    .config
+    .convert
+    .errors
+    .load_pytd
+    .matcher
+    .output
+    .special_builtins
+    .tracer_vm
+    .vm_utils
+    pytype.abstract.abstract
+    pytype.typegraph.cfg
+    pytype.typegraph.cfg_utils
+)
+
+py_library(
+  NAME
+    convert_structural
+  SRCS
+    convert_structural.py
+  DEPS
+    pytype.pytd.pytd
+)
+
+py_library(
+  NAME
+    datatypes
+  SRCS
+    datatypes.py
+)
+
+py_library(
+  NAME
+    debug
+  SRCS
+    debug.py
+  DEPS
+    ._utils
+    pytype.typegraph.cfg_utils
+)
+
+py_library(
+  NAME
+    errors
+  SRCS
+    errors.py
+  DEPS
+    ._utils
+    .debug
+    .matcher
+    pytype.abstract.abstract
+    pytype.overlays.overlays
+    pytype.pytd.pytd
+)
+
+py_library(
+  NAME
+    file_utils
+  SRCS
+    file_utils.py
+  DEPS
+    pytype.platform_utils.platform_utils
+)
+
+py_library(
+  NAME
+    imports_map_loader
+  SRCS
+    imports_map_loader.py
+  DEPS
+    pytype.platform_utils.platform_utils
+)
+
+py_library(
+  NAME
+    io
+  SRCS
+    io.py
+  DEPS
+    .__version__
+    ._utils
+    .analyze
+    .config
+    .constant_folding
+    .context
+    .errors
+    .load_pytd
+    pytype.directors.directors
+    pytype.imports.imports
+    pytype.pyc.pyc
+    pytype.pyi.parser
+    pytype.pytd.pytd
+)
+
+py_library(
+  NAME
+    load_pytd
+  SRCS
+    load_pytd.py
+  DEPS
+    .file_utils
+    .module_utils
+    pytype.imports.imports
+    pytype.platform_utils.platform_utils
+    pytype.pyi.parser
+    pytype.pytd.pytd
+)
+
+py_library(
+  NAME
+    matcher
+  SRCS
+    matcher.py
+  DEPS
+    ._utils
+    .datatypes
+    .special_builtins
+    pytype.abstract.abstract
+    pytype.overlays.overlays
+    pytype.pytd.pytd
+    pytype.typegraph.cfg
+)
+
+py_library(
+  NAME
+    metaclass
+  SRCS
+    metaclass.py
+  DEPS
+    pytype.abstract.abstract
+)
+
+py_library(
+  NAME
+    metrics
+  SRCS
+    metrics.py
+)
+
+py_library(
+  NAME
+    module_utils
+  SRCS
+    module_utils.py
+  DEPS
+    pytype.platform_utils.platform_utils
+)
+
+py_library(
+  NAME
+    output
+  SRCS
+    output.py
+  DEPS
+    ._utils
+    .special_builtins
+    pytype.abstract.abstract
+    pytype.overlays.overlays
+    pytype.pyi.parser
+    pytype.pytd.pytd
+)
+
+py_library(
+  NAME
+    overriding_checks
+  SRCS
+    overriding_checks.py
+  DEPS
+    pytype.abstract.abstract
+    pytype.pytd.pytd
+)
+
+py_library(
+  NAME
+    preprocess
+  SRCS
+    preprocess.py
+)
+
+py_library(
+  NAME
+    pytype_source_utils
+  SRCS
+    pytype_source_utils.py
+  DEPS
+    pytype.platform_utils.platform_utils
+    pytype.stubs.stubs
+)
+
+py_library(
+  NAME
+    special_builtins
+  SRCS
+    special_builtins.py
+  DEPS
+    pytype.abstract.abstract
+)
+
+py_library(
+  NAME
+    state
+  SRCS
+    state.py
+  DEPS
+    ._utils
+    .blocks
+    .compare
+    .metrics
+    pytype.abstract.abstract
+    pytype.typegraph.cfg
+)
+
+py_library(
+  NAME
+    tracer_vm
+  SRCS
+    tracer_vm.py
+  DEPS
+    .special_builtins
+    .state
+    .vm
+    pytype.abstract.abstract
+    pytype.overlays.overlays
+    pytype.pytd.pytd
+    pytype.typegraph.cfg
+)
+
+py_library(
+  NAME
+    _utils
+  SRCS
+    utils.py
+  DEPS
+    pytype.platform_utils.platform_utils
+)
+
+py_library(
+  NAME
+    __version__
+  SRCS
+    __version__.py
+)
+
+py_library(
+  NAME
+    vm
+  SRCS
+    __init__.py
+    vm.py
+  DEPS
+    .blocks
+    .compare
+    .constant_folding
+    .datatypes
+    .load_pytd
+    .metrics
+    .preprocess
+    .state
+    .vm_utils
+    pytype.abstract.abstract
+    pytype.directors.directors
+    pytype.overlays.overlays
+    pytype.pyc.pyc
+    pytype.pyi.parser
+    pytype.pytd.pytd
+    pytype.typegraph.cfg
+    pytype.typegraph.cfg_utils
+)
+
+py_library(
+  NAME
+    vm_utils
+  SRCS
+    vm_utils.py
+  DEPS
+    ._utils
+    .blocks
+    .metaclass
+    .overriding_checks
+    .state
+    pytype.abstract.abstract
+    pytype.platform_utils.platform_utils
+    pytype.pyc.pyc
+    pytype.pytd.pytd
+    pytype.typegraph.cfg
+)
+
+py_test(
+  NAME
+    typegraph_metrics_test
+  SRCS
+    typegraph_metrics_test.py
+  DEPS
+    .context
+    .errors
+    .vm
+    pytype.tests.test_base
+    pytype.typegraph.cfg
+)
+
+py_test(
+  NAME
+    config_test
+  SRCS
+    config_test.py
+  DEPS
+    ._utils
+    .config
+)
+
+py_test(
+  NAME
+    datatypes_test
+  SRCS
+    datatypes_test.py
+  DEPS
+    .datatypes
+    pytype.typegraph.cfg
+)
+
+py_test(
+  NAME
+    io_test
+  SRCS
+    io_test.py
+  DEPS
+    .config
+    .io
+    pytype.platform_utils.platform_utils
+    pytype.pytd.pytd
+)
+
+py_test(
+  NAME
+    file_utils_test
+  SRCS
+    file_utils_test.py
+  DEPS
+    .file_utils
+    pytype.platform_utils.platform_utils
+    pytype.tests.test_base
+)
+
+py_test(
+  NAME
+    module_utils_test
+  SRCS
+    module_utils_test.py
+  DEPS
+    .file_utils
+    .module_utils
+    pytype.platform_utils.platform_utils
+)
+
+py_test(
+  NAME
+    pytype_source_utils_test
+  SRCS
+    pytype_source_utils_test.py
+  DEPS
+    .pytype_source_utils
+    pytype.platform_utils.platform_utils
+)
+
+py_test(
+  NAME
+    utils_test
+  SRCS
+    utils_test.py
+  DEPS
+    ._utils
+)
+
+py_test(
+  NAME
+    compare_test
+  SRCS
+    compare_test.py
+  DEPS
+    .compare
+    .config
+    .context
+    .errors
+    .load_pytd
+    pytype.abstract.abstract
+    pytype.pytd.pytd
+    pytype.tests.test_base
+)
+
+py_test(
+  NAME
+    matcher_test
+  SRCS
+    matcher_test.py
+  DEPS
+    .config
+    pytype.abstract.abstract
+    pytype.tests.test_base
+)
+
+py_test(
+  NAME
+    convert_test
+  SRCS
+    convert_test.py
+  DEPS
+    .config
+    pytype.abstract.abstract
+    pytype.pytd.pytd
+    pytype.tests.test_base
+)
+
+py_test(
+  NAME
+    attribute_test
+  SRCS
+    attribute_test.py
+  DEPS
+    .config
+    .context
+    .errors
+    .load_pytd
+    pytype.abstract.abstract
+    pytype.tests.test_base
+)
+
+py_test(
+  NAME
+    blocks_test
+  SRCS
+    blocks_test.py
+  DEPS
+    .blocks
+    pytype.pyc.pyc
+    pytype.tests.test_base
+)
+
+py_test(
+  NAME
+    constant_folding_test
+  SRCS
+    constant_folding_test.py
+  DEPS
+    .blocks
+    .config
+    .constant_folding
+    .context
+    .errors
+    .load_pytd
+    .state
+    pytype.abstract.abstract
+    pytype.pyc.pyc
+    pytype.pytd.pytd
+    pytype.tests.test_base
+)
+
+py_test(
+  NAME
+    vm_test
+  SRCS
+    vm_test.py
+  DEPS
+    .context
+    .vm
+    pytype.tests.test_base
+)
+
+py_test(
+  NAME
+    load_pytd_test
+  SRCS
+    load_pytd_test.py
+  DEPS
+    .config
+    .file_utils
+    .load_pytd
+    .module_utils
+    pytype.imports.imports
+    pytype.platform_utils.platform_utils
+    pytype.pytd.pytd
+    pytype.stubs.stubs
+    pytype.tests.test_base
+)
+
+py_test(
+  NAME
+    imports_map_loader_test
+  SRCS
+    imports_map_loader_test.py
+  DEPS
+    .file_utils
+    .imports_map_loader
+    pytype.platform_utils.platform_utils
+    pytype.stubs.stubs
+    pytype.tests.test_base
+)
+
+py_test(
+  NAME
+    metrics_test
+  SRCS
+    metrics_test.py
+  DEPS
+    .metrics
+    pytype.platform_utils.platform_utils
+)
+
+py_test(
+  NAME
+    state_test
+  SRCS
+    state_test.py
+  DEPS
+    .compare
+    .state
+    pytype.typegraph.cfg
+)
+
+py_test(
+  NAME
+    debug_test
+  SRCS
+    debug_test.py
+  DEPS
+    .debug
+    pytype.typegraph.cfg
+)
+
+py_library(
+  NAME
+    pytype_main_deps
+  DEPS
+    ._utils
+    .config
+    .io
+    .load_pytd
+    .metrics
+    pytype.imports.imports
+    pytype.pytd.pytd
+    pytype.pytd.parse.parse
+)
+
+add_subdirectory(abstract)
+add_subdirectory(ast)
+add_subdirectory(directors)
+add_subdirectory(imports)
+add_subdirectory(inspect)
+add_subdirectory(overlays)
+add_subdirectory(platform_utils)
+add_subdirectory(pyc)
+add_subdirectory(pyi)
+add_subdirectory(pytd)
+add_subdirectory(stubs)
+add_subdirectory(tests)
+add_subdirectory(tools)
+add_subdirectory(typegraph)

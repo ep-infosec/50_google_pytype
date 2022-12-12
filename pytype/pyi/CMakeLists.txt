@@ -1,0 +1,204 @@
+add_package()
+
+py_library(
+  NAME
+    parser
+  DEPS
+    ._ast_parser
+    .classdef
+    .conditions
+    .definitions
+    .evaluator
+    .function
+    .init
+    .metadata
+    .modules
+    .types
+    .visitor
+)
+
+py_library(
+  NAME
+    _ast_parser
+  SRCS
+    parser.py
+  DEPS
+    .classdef
+    .conditions
+    .definitions
+    .evaluator
+    .function
+    .modules
+    .types
+    .visitor
+    pytype.ast.ast
+    pytype.pytd.pytd_for_parser
+)
+
+py_library(
+  NAME
+    classdef
+  SRCS
+    classdef.py
+  DEPS
+    .types
+    pytype.pytd.pytd_for_parser
+    pytype.pytd.parse.parse
+)
+
+py_library(
+  NAME
+    conditions
+  SRCS
+    conditions.py
+  DEPS
+    .types
+    pytype.ast.ast
+    pytype.pytd.pytd_for_parser
+)
+
+py_library(
+  NAME
+    definitions
+  SRCS
+    definitions.py
+  DEPS
+    .classdef
+    .metadata
+    .types
+    pytype.pytd.pytd_for_parser
+    pytype.pytd.parse.parse
+)
+
+py_library(
+  NAME
+    evaluator
+  SRCS
+    evaluator.py
+  DEPS
+    .types
+)
+
+py_library(
+  NAME
+    function
+  SRCS
+    function.py
+  DEPS
+    .types
+    pytype.pytd.pytd_for_parser
+)
+
+py_library(
+  NAME
+    init
+  SRCS
+    __init__.py
+)
+
+py_library(
+  NAME
+    metadata
+  SRCS
+    metadata.py
+  DEPS
+    .evaluator
+)
+
+py_library(
+  NAME
+    modules
+  SRCS
+    modules.py
+  DEPS
+    .types
+    pytype.utils
+    pytype.pytd.pytd_for_parser
+    pytype.pytd.parse.parse
+)
+
+py_library(
+  NAME
+    types
+  SRCS
+    types.py
+  DEPS
+    pytype.pytd.pytd_for_parser
+)
+
+py_library(
+  NAME
+    visitor
+  SRCS
+    visitor.py
+  DEPS
+    .types
+    pytype.ast.ast
+)
+
+toplevel_py_binary(
+  NAME
+    parse_pyi
+  SRCS
+    parse_pyi.py
+  MAIN
+    parse_pyi.py
+  DEPS
+    ._ast_parser
+    .types
+    pytype.utils
+    pytype.pytd.pytd_for_parser
+)
+
+py_library(
+  NAME
+    parser_test_base
+  SRCS
+    parser_test_base.py
+  DEPS
+    ._ast_parser
+    pytype.pytd.pytd
+    pytype.tests.test_base
+)
+
+py_test(
+  NAME
+    parser_test
+  SRCS
+    parser_test.py
+  DEPS
+    .parser
+    .parser_test_base
+    pytype.pytd.pytd_for_parser
+    pytype.stubs.stubs
+    pytype.tests.test_base
+)
+
+py_test(
+  NAME
+    entire_file_parser_test
+  SRCS
+    entire_file_parser_test.py
+  DEPS
+    .parser_test_base
+    pytype.imports.imports
+)
+
+py_test(
+  NAME
+    evaluator_test
+  SRCS
+    evaluator_test.py
+  DEPS
+    .evaluator
+    .types
+)
+
+py_test(
+  NAME
+    metadata_test
+  SRCS
+    metadata_test.py
+  DEPS
+    .metadata
+)

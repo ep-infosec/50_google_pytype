@@ -1,0 +1,414 @@
+add_package()
+
+py_library(
+  NAME
+    api
+  DEPS
+    ._pytd
+    .pytd_utils
+    .pytd_visitors
+)
+
+py_library(
+  NAME
+    pytd
+  DEPS
+    ._pytd
+    .abc_hierarchy
+    .base_visitor
+    .booleq
+    .escape
+    .mro
+    .optimize
+    .pep484
+    .pytd_utils
+    .pytd_visitors
+    .serialize_ast
+    .slots
+    .transforms
+    .type_match
+    .visitors
+)
+
+py_library(
+  NAME
+    pytd_for_parser
+  DEPS
+    ._pytd
+    .escape
+    .pep484
+    .pytd_utils
+    .slots
+    .visitors
+    pytype.pytd.codegen.codegen
+)
+
+py_library(
+  NAME
+    pytd_for_codegen
+  DEPS
+    ._pytd
+    .base_visitor
+    .escape
+)
+
+toplevel_py_binary(
+  NAME
+    pytd-tool
+  SRCS
+    main.py
+  MAIN
+    main.py
+  DEPS
+    .optimize
+    .pytd_utils
+    pytype.utils
+    pytype.imports.imports
+    pytype.pyi.parser
+)
+
+py_library(
+  NAME
+    abc_hierarchy
+  SRCS
+    abc_hierarchy.py
+  DEPS
+    pytype.utils
+)
+
+py_library(
+  NAME
+    base_visitor
+  SRCS
+    base_visitor.py
+  DEPS
+    ._pytd
+    pytype.typegraph.cfg_utils
+)
+
+py_library(
+  NAME
+    booleq
+  SRCS
+    booleq.py
+  DEPS
+    .pytd_utils
+)
+
+py_library(
+  NAME
+    escape
+  SRCS
+    escape.py
+)
+
+py_library(
+  NAME
+    mro
+  SRCS
+    mro.py
+  DEPS
+    ._pytd
+)
+
+py_library(
+  NAME
+    optimize
+  SRCS
+    optimize.py
+  DEPS
+    ._pytd
+    .abc_hierarchy
+    .escape
+    .pytd_utils
+    .pytd_visitors
+    .visitors
+    pytype.utils
+)
+
+py_library(
+  NAME
+    pep484
+  SRCS
+    pep484.py
+  DEPS
+    ._pytd
+    .base_visitor
+)
+
+py_library(
+  NAME
+    _pytd
+  SRCS
+    __init__.py
+    pytd.py
+  DEPS
+    pytype.pytd.parse.parse
+)
+
+py_library(
+  NAME
+    pytd_utils
+  SRCS
+    pytd_utils.py
+  DEPS
+    ._pytd
+    .printer
+    .pytd_visitors
+    pytype.utils
+    pytype.platform_utils.platform_utils
+    pytype.pytd.parse.parse
+)
+
+py_library(
+  NAME
+    pytd_visitors
+  SRCS
+    pytd_visitors.py
+  DEPS
+    ._pytd
+    .base_visitor
+)
+
+py_library(
+  NAME
+    printer
+  SRCS
+    printer.py
+  DEPS
+    ._pytd
+    .base_visitor
+    .pep484
+    pytype.utils
+    pytype.pytd.parse.parse
+)
+
+py_library(
+  NAME
+    serialize_ast
+  SRCS
+    serialize_ast.py
+  DEPS
+    ._pytd
+    .pytd_utils
+    .visitors
+    pytype.utils
+    pytype.pyi.parser
+)
+
+py_library(
+  NAME
+    slots
+  SRCS
+    slots.py
+)
+
+py_library(
+  NAME
+    transforms
+  SRCS
+    transforms.py
+  DEPS
+    .optimize
+    .visitors
+)
+
+py_library(
+  NAME
+    type_match
+  SRCS
+    type_match.py
+  DEPS
+    ._pytd
+    .booleq
+    .escape
+    .pytd_utils
+    .visitors
+    pytype.utils
+    pytype.pytd.parse.parse
+)
+
+py_library(
+  NAME
+    visitors
+  SRCS
+    visitors.py
+  DEPS
+    ._pytd
+    .base_visitor
+    .escape
+    .mro
+    .printer
+    .pytd_utils
+    .pytd_visitors
+    pytype.utils
+    pytype.pytd.parse.parse
+)
+
+py_test(
+  NAME
+    abc_hierarchy_test
+  SRCS
+    abc_hierarchy_test.py
+  DEPS
+    .abc_hierarchy
+)
+
+py_test(
+  NAME
+    base_visitor_test
+  SRCS
+    base_visitor_test.py
+  DEPS
+    .base_visitor
+)
+
+py_test(
+  NAME
+    booleq_test
+  SRCS
+    booleq_test.py
+  DEPS
+    .booleq
+)
+
+py_test(
+  NAME
+    mro_test
+  SRCS
+    mro_test.py
+  DEPS
+    .mro
+    .visitors
+    pytype.libvm
+    pytype.pyi.parser
+    pytype.pytd.parse.parser_test_base
+)
+
+py_test(
+  NAME
+    optimize_test
+  SRCS
+    optimize_test.py
+  DEPS
+    ._pytd
+    .optimize
+    .pytd_utils
+    .visitors
+    pytype.libvm
+    pytype.pytd.parse.parser_test_base
+)
+
+py_test(
+  NAME
+    pep484_test
+  SRCS
+    pep484_test.py
+  DEPS
+    ._pytd
+    .pep484
+    .pytd_utils
+    pytype.pytd.parse.parser_test_base
+)
+
+py_test(
+  NAME
+    slots_test
+  SRCS
+    slots_test.py
+  DEPS
+    .slots
+)
+
+py_test(
+  NAME
+    transforms_test
+  SRCS
+    transforms_test.py
+  DEPS
+    .transforms
+    pytype.pytd.parse.parser_test_base
+)
+
+py_test(
+  NAME
+    type_match_test
+  SRCS
+    type_match_test.py
+  DEPS
+    ._pytd
+    .booleq
+    .escape
+    .pytd_utils
+    .type_match
+    .visitors
+    pytype.pyi.parser
+    pytype.pytd.parse.parser_test_base
+)
+
+py_test(
+  NAME
+    visitors_test
+  SRCS
+    visitors_test.py
+  DEPS
+    ._pytd
+    .escape
+    .pytd_utils
+    .visitors
+    pytype.pytd.parse.parser_test_base
+)
+
+py_test(
+  NAME
+    pytd_test
+  SRCS
+    pytd_test.py
+  DEPS
+    ._pytd
+)
+
+py_test(
+  NAME
+    pytd_utils_test
+  SRCS
+    pytd_utils_test.py
+  DEPS
+    ._pytd
+    .pytd_utils
+    .visitors
+    pytype.imports.imports
+    pytype.platform_utils.platform_utils
+    pytype.pyi.parser
+    pytype.pytd.parse.parser_test_base
+    pytype.tests.test_base
+)
+
+py_test(
+  NAME
+    pytd_visitors_test
+  SRCS
+    pytd_visitors_test.py
+  DEPS
+    .pytd_visitors
+    .visitors
+    pytype.pytd.parse.parser_test_base
+)
+
+py_test(
+  NAME
+    serialize_ast_test
+  SRCS
+    serialize_ast_test.py
+  DEPS
+    .pytd_utils
+    .serialize_ast
+    .visitors
+    pytype.libvm
+    pytype.imports.imports
+    pytype.platform_utils.platform_utils
+    pytype.tests.test_base
+)
+
+add_subdirectory(codegen)
+add_subdirectory(parse)
